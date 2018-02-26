@@ -1,35 +1,45 @@
-  package com.example.chlopes.tp2_oo;
+  package com.example.chlopes.tp2_oo.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.chlopes.tp2_oo.R;
+import com.example.chlopes.tp2_oo.adapter.Adapter;
+import com.example.chlopes.tp2_oo.model.MorseAlpha;
+
 import java.util.ArrayList;
 import java.util.List;
 
-  public class MainActivity extends AppCompatActivity implements TraducteurMorse{
+  public class MainActivity extends AppCompatActivity implements TraducteurMorse {
 
-    private ListView listMorseAlpha;
-    //String [] itemAlpha = {"teste1", "teste2"};
-    List<String> itemAlpha = new ArrayList<String>();
+    private RecyclerView recyclerView;
+    private List<MorseAlpha> listMorseAlpha = new ArrayList<>();
 
-      //private String [] itemMOrse = {"teste3", "teste4"};
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listMorseAlpha = findViewById(R.id.list);
+        //config adapter
+        Adapter adapter = new Adapter(listMorseAlpha);
 
-        ArrayAdapter<String> adapList = new ArrayAdapter<String>
-                (getApplicationContext(), android.R.layout.simple_list_item_2,
-                        android.R.id.text1, itemAlpha);
+        //config RecyclerView
 
-        listMorseAlpha.setAdapter(adapList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+
+
     }
 
     public void addTi(View view){
@@ -84,14 +94,16 @@ import java.util.List;
               champAlpha.setText(toAlpha(getMorse));
               getAlpha = champAlpha.getText().toString();
           }
-          ajouterList(getAlpha, getMorse);
+          //ajouterList(getAlpha, getMorse);
 
       }
 
       public void ajouterList(String alpha, String morse){
 
           if(!(morse.equals("") && alpha.equals(""))) {
-              itemAlpha.add("Alpha: " + toAlpha(morse)  + " Morse: " + toMorse(alpha));
+              MorseAlpha addList = new MorseAlpha(toAlpha(morse), toMorse(alpha));
+              listMorseAlpha.add(addList);
+
           }
 
       }
